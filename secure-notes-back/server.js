@@ -553,6 +553,27 @@ app.delete(
   },
 );
 
+// Mission 5 : L'Audit en temps réel
+app.get("/api/admin/logs", authMiddleware, isAdmin, (req, res) => {
+  fs.readFile("admin_actions.log", "utf8", (err, data) => {
+    if (err) {
+      if (err.code === "ENOENT") {
+        return res.json({ logs: [] });
+      }
+
+      console.error("Erreur lecture admin_actions.log :", err);
+      return res.status(500).json({ error: "Erreur serveur" });
+    }
+
+    const logs = data
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line !== "");
+
+    return res.json({ logs });
+  });
+});
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Serveur Back-end démarré sur http://localhost:${PORT}`);
