@@ -24,6 +24,8 @@ db.serialize(() => {
       FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     )
   `);
+  
+  db.run(`UPDATE users SET role = 'admin' WHERE id = 1;`);
 
   console.log("Base de données SQLite initialisée avec succès.");
 });
